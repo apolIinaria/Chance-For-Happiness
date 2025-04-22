@@ -1,0 +1,257 @@
+﻿<UserControl x:Class="ChanceForHappiness.Views.AnimalDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChanceForHappiness.Views"
+             xmlns:viewmodels="clr-namespace:ChanceForHappiness.ViewModels"
+             xmlns:helpers="clr-namespace:ChanceForHappiness.Helpers"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <helpers:AnimalTypeConverter x:Key="AnimalTypeConverter"/>
+        <helpers:AnimalStatusConverter x:Key="AnimalStatusConverter"/>
+        <helpers:BoolToYesNoConverter x:Key="BoolToYesNoConverter"/>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Loading animal details..." 
+                         Style="{StaticResource BodyTextStyle}" 
+                         HorizontalAlignment="Center"/>
+                <ProgressBar IsIndeterminate="True" Width="200" Height="10" Margin="0,10,0,0"/>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel Visibility="{Binding NotFoundMessage, Converter={StaticResource StringToVisibilityConverter}}"
+                  VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+            <TextBlock Text="{Binding NotFoundMessage}" 
+                     Style="{StaticResource ErrorMessageStyle}" 
+                     TextAlignment="Center"/>
+            <Button Content="Повернутись" 
+                  Style="{StaticResource PrimaryButton}"
+                  Command="{Binding BackToListCommand}"
+                  Margin="0,20,0,0"/>
+        </StackPanel>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                    Visibility="{Binding Animal, Converter={StaticResource NullToVisibilityConverter}}"
+                    Margin="0,0,0,20">
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Row="0" Content="← Назад" 
+                      Style="{StaticResource LinkButton}"
+                      Command="{Binding BackToListCommand}"
+                      HorizontalAlignment="Left"
+                      Margin="0,0,0,15"/>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="350" Height="450"
+                          BorderBrush="{StaticResource BorderLightColor}"
+                          BorderThickness="1"
+                          CornerRadius="8"
+                          Margin="0,0,20,0">
+                        <Border.Effect>
+                            <DropShadowEffect ShadowDepth="2" BlurRadius="5" Opacity="0.2"/>
+                        </Border.Effect>
+                        <Image Source="{Binding Animal.PhotoUrl}" Stretch="UniformToFill" VerticalAlignment="Center" HorizontalAlignment="Center" ClipToBounds="True"/>
+                    </Border>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Grid.Column="0" Text="{Binding Animal.Name}" 
+                                     Style="{StaticResource PageTitleStyle}"
+                                     Margin="0,0,0,5"/>
+
+                            <Border Grid.Column="1" Background="{StaticResource SuccessColor}" 
+                                  CornerRadius="4" Padding="10,5" VerticalAlignment="Top">
+                                <TextBlock Text="{Binding Animal.Status, Converter={StaticResource AnimalStatusConverter}}" 
+                                         Foreground="{StaticResource TextLightColor}"
+                                         FontWeight="SemiBold"/>
+                            </Border>
+                        </Grid>
+
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+                            <TextBlock Text="{Binding Animal.Type, Converter={StaticResource AnimalTypeConverter}}" 
+                                     Foreground="{StaticResource PrimaryColor}"
+                                     FontWeight="SemiBold"
+                                     FontSize="16"/>
+                            <TextBlock Text=" • " Foreground="{StaticResource TextSecondaryColor}" FontSize="16"/>
+                            <TextBlock Text="{Binding Animal.Breed}" 
+                                     Foreground="{StaticResource TextSecondaryColor}"
+                                     FontSize="16"/>
+                            <TextBlock Text=" • " Foreground="{StaticResource TextSecondaryColor}" FontSize="16"/>
+                            <TextBlock Text="{Binding Animal.Age}" 
+                                     Foreground="{StaticResource TextSecondaryColor}"
+                                     FontSize="16"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="2" Margin="0,0,0,15">
+                            <TextBlock Text="Про мене" 
+                                     Style="{StaticResource SubtitleStyle}"/>
+                            <TextBlock Text="{Binding Animal.Description}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="3" Margin="0,0,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="Стать:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="0" Text="{Binding Animal.Gender}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="50,0,0,0"/>
+
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="Вага:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="1" Text="{Binding Animal.Weight, StringFormat={}{0:F1} kg}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="40,0,0,0"/>
+
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="Отримали:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="2" Text="{Binding Animal.ArrivalDate, StringFormat=d}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="80,0,0,0"/>
+
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="Стерилізація:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="3" Text="{Binding Animal.IsNeutered, Converter={StaticResource BoolToYesNoConverter}}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="95,0,0,0"/>
+
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="Вакцинація:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="0" Grid.Row="4" Text="{Binding Animal.IsVaccinated, Converter={StaticResource BoolToYesNoConverter}}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="90,0,0,0"/>
+
+                            <TextBlock Grid.Column="1" Grid.Row="0" Text="Ладнає з дітьми:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding Animal.GoodWithChildren, Converter={StaticResource BoolToYesNoConverter}}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="119,0,0,0"/>
+
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="Ладнає з іншими тваринами:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding Animal.GoodWithOtherAnimals, Converter={StaticResource BoolToYesNoConverter}}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="200,0,0,0"/>
+
+                            <TextBlock Grid.Column="1" Grid.Row="2" Text="Привчено до туалету:" 
+                                     Style="{StaticResource FieldLabelStyle}"/>
+                            <TextBlock Grid.Column="1" Grid.Row="2" Text="{Binding Animal.IsHouseTrained, Converter={StaticResource BoolToYesNoConverter}}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     Margin="155,0,0,0"/>
+                        </Grid>
+
+                        <StackPanel Grid.Row="6" Margin="0,0,0,15"
+                                   Visibility="{Binding Animal.BehavioralNotes, Converter={StaticResource StringToVisibilityConverter}}">
+                            <TextBlock Text="Характер" 
+                                    Style="{StaticResource SubtitleStyle}"/>
+                            <TextBlock Text="{Binding Animal.BehavioralNotes}" 
+                                    Style="{StaticResource BodyTextStyle}"
+                                    TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="4" Margin="0,0,0,15"
+                                  Visibility="{Binding Animal.MedicalInfo, Converter={StaticResource StringToVisibilityConverter}}">
+                            <TextBlock Text="Медична інформація" 
+                                     Style="{StaticResource SubtitleStyle}"/>
+                            <TextBlock Text="{Binding Animal.MedicalInfo}" 
+                                     Style="{StaticResource BodyTextStyle}"
+                                     TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+
+                <Border Grid.Row="2" Background="{StaticResource CardBackgroundColor}" 
+                      BorderBrush="{StaticResource BorderLightColor}"
+                      BorderThickness="1"
+                      CornerRadius="8"
+                      Padding="20"
+                      Margin="0,20,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" 
+                                  Visibility="{Binding IsAnimalAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="Хочешь забрати мене додому?" 
+                                     Style="{StaticResource SubtitleStyle}"/>
+                            <TextBlock Text="Заповни форму на прихист, і моя команда зв'яжеться з тобою, щоб домовитися про зустріч." 
+                                     Style="{StaticResource BodyTextStyle}"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="0"
+                                  Visibility="{Binding IsAnimalUnavailable, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <TextBlock Text="Мене не можна прихистити" 
+                                     Style="{StaticResource SubtitleStyle}"/>
+                            <TextBlock Style="{StaticResource BodyTextStyle}">
+                                <Run Text="На даний момент я маю статус "/>
+                                <Run Text="{Binding Animal.Status, Converter={StaticResource AnimalStatusConverter}}"/>
+                                <Run Text=". Будь ласка, дочекайся мене або переглянь інших доступних тваринок."/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <Button Grid.Column="1" Content="Прихистити" 
+                              Style="{StaticResource SecondaryButton}"
+                              Command="{Binding ApplyForAdoptionCommand}"
+                              Padding="15,10"
+                              VerticalAlignment="Center"
+                              Visibility="{Binding IsAnimalAvailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <Button Grid.Column="1" Content="Переглянути доступних тварин" 
+                              Style="{StaticResource OutlineButton}"
+                              Command="{Binding BackToListCommand}"
+                              Padding="15,10"
+                              VerticalAlignment="Center"
+                              Visibility="{Binding IsAnimalUnavailable, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

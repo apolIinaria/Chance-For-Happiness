@@ -1,0 +1,336 @@
+﻿<UserControl x:Class="ChanceForHappiness.Views.AdoptionFormView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChanceForHappiness.Views"
+             xmlns:viewmodels="clr-namespace:ChanceForHappiness.ViewModels"
+             xmlns:helpers="clr-namespace:ChanceForHappiness.Helpers"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <helpers:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <helpers:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <helpers:AnimalTypeConverter x:Key="AnimalTypeConverter"/>
+
+        <Style x:Key="ValidationTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource TextInputStyle}">
+        <Setter Property="Validation.ErrorTemplate">
+            <Setter.Value>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder x:Name="placeholder" />
+                        <TextBlock Text="{Binding [0].ErrorContent}" Foreground="Red" 
+                                       FontSize="11" Margin="0,3,0,0" />
+                    </StackPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="True">
+                <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self}, Path=(Validation.Errors)[0].ErrorContent}"/>
+                <Setter Property="BorderBrush" Value="Red"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    </UserControl.Resources>
+    
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Grid Margin="20,20,20,40">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="Заява на прихист" 
+                         Style="{StaticResource PageTitleStyle}"/>
+
+                <Border Grid.Row="1" 
+                      Background="{StaticResource CardBackgroundColor}"
+                      BorderBrush="{StaticResource BorderLightColor}"
+                      BorderThickness="1"
+                      CornerRadius="8"
+                      Padding="20"
+                      Margin="0,0,0,20"
+                      Visibility="{Binding SubmissionMessage, Converter={StaticResource StringToVisibilityConverter}}">
+                    <StackPanel>
+                        <TextBlock Text="{Binding SubmissionMessage}" 
+                                 Style="{StaticResource SuccessMessageStyle}"
+                                 Visibility="{Binding IsSubmissionSuccessful, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding ErrorMessage}" 
+                                 Style="{StaticResource ErrorMessageStyle}"
+                                 Visibility="{Binding IsSubmissionSuccessful, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}"/>
+                    </StackPanel>
+                </Border>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+
+                        <TextBlock Text="Обраний вами вихованець" 
+                                 Style="{StaticResource SubtitleStyle}"
+                                 Margin="0,0,0,10"/>
+
+                        <Grid Visibility="{Binding SelectedAnimal, Converter={StaticResource NullToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Width="80" Height="80"
+                                  BorderBrush="{StaticResource BorderLightColor}"
+                                  BorderThickness="1"
+                                  CornerRadius="4"
+                                  Margin="0,0,15,15">
+                                <Image Source="{Binding SelectedAnimal.PhotoUrl}" Stretch="UniformToFill"/>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,0,15">
+                                <TextBlock Text="{Binding SelectedAnimal.Name}" 
+                                         Style="{StaticResource CardTitleStyle}"
+                                         Margin="0,0,0,5"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding SelectedAnimal.Type, Converter={StaticResource AnimalTypeConverter}}" 
+                                             Foreground="{StaticResource PrimaryColor}"
+                                             FontWeight="SemiBold"/>
+                                    <TextBlock Text=" • " Foreground="{StaticResource TextSecondaryColor}"/>
+                                    <TextBlock Text="{Binding SelectedAnimal.Breed}" 
+                                             Foreground="{StaticResource TextSecondaryColor}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Visibility="{Binding SelectedAnimal, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=Invert}">
+                            <ComboBox ItemsSource="{Binding AvailableAnimals}"
+                                    SelectedValue="{Binding SelectedAnimalId, Mode=TwoWay}"
+                                    SelectedValuePath="Id"
+                                    DisplayMemberPath="Name"
+                                    Margin="0,0,0,15">
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding SelectedAnimalId}" Value="{x:Null}">
+                                                <Setter Property="BorderBrush" Value="Red"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                            </ComboBox>
+                        </Grid>
+
+                        <TextBlock Text="Персональна інформація" 
+                                 Style="{StaticResource SubtitleStyle}"
+                                 Margin="0,15,0,10"/>
+
+                        <TextBlock Text="ПІБ" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource ValidationTextBoxStyle}">
+                            <TextBox.Text>
+                                <Binding Path="ApplicantName" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helpers:RequiredTextValidationRule FieldName="ПІБ"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock Text="Номер телефону" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource ValidationTextBoxStyle}">
+                            <TextBox.Text>
+                                <Binding Path="PhoneNumber" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helpers:PhoneValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock Text="Email" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource ValidationTextBoxStyle}">
+                            <TextBox.Text>
+                                <Binding Path="Email" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helpers:EmailValidationRule/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock Text="Домашня адреса" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource ValidationTextBoxStyle}"
+                               Height="60"
+                               TextWrapping="Wrap"
+                               AcceptsReturn="True">
+                            <TextBox.Text>
+                                <Binding Path="Address" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helpers:RequiredTextValidationRule FieldName="Адреса" MaxLength="500"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock Text="Тип житла" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <ComboBox SelectedValue="{Binding HousingType, Mode=TwoWay}">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HousingType}" Value="{x:Null}">
+                                            <Setter Property="BorderBrush" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                            <ComboBoxItem Content="Квартира"/>
+                            <ComboBoxItem Content="Будинок"/>
+                            <ComboBoxItem Content="Таунхаус"/>
+                            <ComboBoxItem Content="Інше"/>
+                        </ComboBox>
+
+                        <CheckBox Content="Власне житло" 
+                                Style="{StaticResource CheckBoxStyle}"
+                                IsChecked="{Binding HasOwnHome}"
+                                Margin="0,0,0,15"/>
+
+                        <TextBlock Text="Хто ще з вами проживає?" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource TextInputStyle}"
+                               Text="{Binding LivingSituation, UpdateSourceTrigger=PropertyChanged}"
+                               Height="60"
+                               TextWrapping="Wrap"
+                               AcceptsReturn="True"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                        <TextBlock Text="Досвід" 
+                                 Style="{StaticResource SubtitleStyle}"
+                                 Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Попередній досвід з домашніми тваринами" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource ValidationTextBoxStyle}"
+                               Height="80"
+                               TextWrapping="Wrap"
+                               AcceptsReturn="True">
+                            <TextBox.Text>
+                                <Binding Path="PreviousExperience" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helpers:RequiredTextValidationRule FieldName="Попередній досвід" MaxLength="1000"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <CheckBox Content="Наразі маю інших тварин" 
+                                Style="{StaticResource CheckBoxStyle}"
+                                IsChecked="{Binding HasOtherPets}"
+                                Margin="0,0,0,15"/>
+
+                        <TextBlock Text="Опишіть свого/своїх улюбленця"
+                                 Style="{StaticResource FieldLabelStyle}"
+                                 Visibility="{Binding HasOtherPets, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <TextBox Style="{StaticResource TextInputStyle}"
+                               Text="{Binding OtherPetsDescription, UpdateSourceTrigger=PropertyChanged}"
+                               Height="60"
+                               TextWrapping="Wrap"
+                               AcceptsReturn="True"
+                               Visibility="{Binding HasOtherPets, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <TextBlock Text="Кількість годин поза домом на день" 
+                                 Style="{StaticResource FieldLabelStyle}" />
+                            <ComboBox SelectedValue="{Binding HoursAwayFromHome, Mode=TwoWay}"
+                                SelectedValuePath="Tag">
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource ComboBoxStyle}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding HoursAwayFromHome}" Value="0">
+                                                <Setter Property="BorderBrush" Value="Red"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
+                                <ComboBoxItem Tag="0" Content="0-4 годин" />
+                                <ComboBoxItem Tag="4" Content="5-8 годин" />
+                                <ComboBoxItem Tag="8" Content="8+ годин" />
+                            </ComboBox>
+
+                        <TextBlock Text="Чому ви хочете прихистити тварину?" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource ValidationTextBoxStyle}"
+                               Height="80"
+                               TextWrapping="Wrap"
+                               AcceptsReturn="True">
+                            <TextBox.Text>
+                                <Binding Path="AdoptionReason" UpdateSourceTrigger="PropertyChanged">
+                                    <Binding.ValidationRules>
+                                        <helpers:RequiredTextValidationRule FieldName="Причини/мотивація прихисту" MaxLength="1000"/>
+                                    </Binding.ValidationRules>
+                                </Binding>
+                            </TextBox.Text>
+                        </TextBox>
+
+                        <TextBlock Text="Контакти ветеринара (якщо є)"
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource TextInputStyle}"
+                               Text="{Binding VeterinarianContact, UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Text="Додаткова інформація" 
+                                 Style="{StaticResource FieldLabelStyle}"/>
+                        <TextBox Style="{StaticResource TextInputStyle}"
+                               Text="{Binding AdditionalNotes, UpdateSourceTrigger=PropertyChanged}"
+                               Height="80"
+                               TextWrapping="Wrap"
+                               AcceptsReturn="True"/>
+
+                        <CheckBox Content="Я погоджуюся з умовами та положеннями процесу прихисту" 
+                                IsChecked="{Binding AgreedToTerms}"
+                                Margin="0,15,0,20">
+                            <CheckBox.Style>
+                                <Style TargetType="CheckBox" BasedOn="{StaticResource CheckBoxStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding AgreedToTerms}" Value="False">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </CheckBox.Style>
+                        </CheckBox>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Скасувати" 
+                                  Style="{StaticResource OutlineButton}"
+                                  Command="{Binding CancelCommand}"
+                                  Margin="0,0,10,0"/>
+                            <Button Content="Подати заявку" 
+                                  Style="{StaticResource PrimaryButton}"
+                                  Command="{Binding SubmitApplicationCommand}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+
+        <Grid Background="#80000000" 
+              Visibility="{Binding IsSubmitting, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Відправка заявки..." 
+                         Foreground="{StaticResource TextLightColor}"
+                         FontSize="16"
+                         HorizontalAlignment="Center"/>
+                <ProgressBar IsIndeterminate="True" Width="200" Height="10" Margin="0,15,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>
