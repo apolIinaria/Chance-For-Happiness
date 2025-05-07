@@ -13,16 +13,15 @@ namespace ChanceForHappiness.Services
     public class DataService
     {
         private readonly ApplicationDbContext _context;
-
         public DataService()
         {
             _context = new ApplicationDbContext();
-            
+            _context.Database.EnsureCreated();
+
             if (!_context.Animals.Any())
             {
                 SeedInitialData();
             }
-
             App.LoggingService.Log("Сервіс даних ініціалізовано");
         }
 
@@ -229,7 +228,7 @@ namespace ChanceForHappiness.Services
 
         private void SeedInitialData()
         {
-            string baseImagePath = "C:\\Users\\User\\Documents\\Uni\\OOP\\Sem_2\\ChanceForHappiness\\Resources\\Images\\";
+            string baseImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", "");
             _context.Animals.Add(new Animal
             {
                 Name = "Джек",
