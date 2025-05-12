@@ -3,6 +3,11 @@ using System.Windows.Input;
 
 namespace ChanceForHappiness.Helpers
 {
+    /// <summary>
+    /// Клас-реалізація інтерфейсу ICommand для використання в архітектурі MVVM.
+    /// Дозволяє прив'язувати команди в UI до методів у ViewModel,
+    /// що спрощує розділення логіки та представлення.
+    /// </summary>
     public class RelayCommand : ICommand
     {
         private readonly Action<object> _execute;

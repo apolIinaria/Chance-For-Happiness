@@ -3,6 +3,10 @@ using ChanceForHappiness.ViewModels;
 
 namespace ChanceForHappiness.Services
 {
+    /// <summary>
+    /// Перерахування, що визначає основні типи представлень у додатку.
+    /// Використовується для навігації між різними екранами.
+    /// </summary>
     public enum ViewType
     {
         Home,
@@ -12,6 +16,11 @@ namespace ChanceForHappiness.Services
         VolunteerForm
     }
 
+    /// <summary>
+    /// Сервіс навігації в додатку.
+    /// Забезпечує перехід між різними екранами та обробку їх параметрів.
+    /// Реалізує шаблон MVVM для WPF-додатку.
+    /// </summary>
     public class NavigationService
     {
         private MainViewModel _mainViewModel;
@@ -30,6 +39,7 @@ namespace ChanceForHappiness.Services
             App.LoggingService?.Log("Navigation service ініціалізовано");
         }
 
+        /// Здійснює навігацію до вказаного типу представлення з опціональним параметром.
         public void NavigateTo(ViewType viewType, object parameter = null)
         {
             if (!_isInitialized || _mainViewModel == null)
@@ -68,7 +78,7 @@ namespace ChanceForHappiness.Services
                         if (parameter is int selectedAnimalId)
                         {
                             _mainViewModel.CurrentView = new AdoptionFormViewModel(selectedAnimalId);
-                            // Add debug output
+
                             App.LoggingService?.Log($"Створення моделі AdoptionFormViewModel для: {selectedAnimalId}");
                         }
                         else

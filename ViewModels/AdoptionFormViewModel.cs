@@ -10,6 +10,10 @@ using ChanceForHappiness.Services;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// Модель представлення для форми подання заявки на прихисток тварини.
+    /// Надає функціональність для заповнення, валідації та відправлення заявки.
+    /// </summary>
     public class AdoptionFormViewModel : ViewModelBase
     {
         private int? _selectedAnimalId;
@@ -159,8 +163,6 @@ namespace ChanceForHappiness.ViewModels
         {
             _selectedAnimalId = animalId;
 
-            Console.WriteLine($"AdoptionFormViewModel створена з: {animalId}");
-
             SubmitApplicationCommand = new RelayCommand(param => SubmitApplication(), CanSubmitApplication);
             CancelCommand = new RelayCommand(param => App.NavigationService.NavigateTo(ViewType.AnimalList));
 
@@ -173,6 +175,8 @@ namespace ChanceForHappiness.ViewModels
             App.LoggingService.Log($"AdoptionFormViewModel ініціалізовано" +
                                    (animalId.HasValue ? $" для: {animalId}" : ""));
         }
+
+        /// Завантажує дані, необхідні для відображення форми усиновлення.
         public override void Load()
         {
             var animals = App.DataService.GetAnimalsByStatus(AnimalStatus.Available);
@@ -189,6 +193,7 @@ namespace ChanceForHappiness.ViewModels
             }
         }
 
+        /// Завантажує інформацію про вибрану тварину за її ID.
         private void LoadSelectedAnimal()
         {
             if (_selectedAnimalId.HasValue)
@@ -216,6 +221,7 @@ namespace ChanceForHappiness.ViewModels
             }
         }
 
+        /// Перевіряє, чи можна відправити заявку на усиновлення.
         private bool CanSubmitApplication(object param)
         {
             bool hasRequiredFields = !IsSubmitting &&
@@ -226,20 +232,10 @@ namespace ChanceForHappiness.ViewModels
                        !string.IsNullOrWhiteSpace(Address) &&
                        AgreedToTerms;
 
-            if (!hasRequiredFields)
-            {
-                Console.WriteLine($"Форма не може бути надіслана. Проблеми: " +
-                                 $"Подається: {IsSubmitting}, " +
-                                 $"Вибрана тварина: {(SelectedAnimalId.HasValue ? SelectedAnimalId.Value.ToString() : "null")}, " +
-                                 $"ПІБ: {(!string.IsNullOrWhiteSpace(ApplicantName))}, " +
-                                 $"Номер телефону: {(!string.IsNullOrWhiteSpace(PhoneNumber))}, " +
-                                 $"Email: {(!string.IsNullOrWhiteSpace(Email))}, " +
-                                 $"Домашня адреса: {(!string.IsNullOrWhiteSpace(Address))}, " +
-                                 $"Погодження з умовами: {AgreedToTerms}");
-            }
-
             return hasRequiredFields;
         }
+
+        /// Відправляє заявку на усиновлення тварини.
         private void SubmitApplication()
         {
             IsSubmitting = true;
@@ -293,6 +289,7 @@ namespace ChanceForHappiness.ViewModels
             }
         }
 
+        /// Очищає форму після успішного відправлення заявки.
         private void ClearForm()
         {
             ApplicantName = string.Empty;

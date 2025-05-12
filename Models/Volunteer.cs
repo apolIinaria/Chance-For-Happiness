@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChanceForHappiness.Models
 {
+    /// <summary>
+    /// Клас, що представляє заявку на волонтерство у притулку.
+    /// Містить всю необхідну інформацію про потенційного волонтера,
+    /// його навички, мотивацію та доступність для волонтерської роботи.
+    /// </summary>
     public class Volunteer
     {
         public int Id { get; set; }

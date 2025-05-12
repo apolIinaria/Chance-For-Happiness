@@ -8,6 +8,11 @@ using System.Windows.Controls;
 
 namespace ChanceForHappiness.Helpers
 {
+    /// <summary>
+    /// Клас для валідації віку у WPF застосунку.
+    /// Реалізує ValidationRule, який дозволяє перевіряти дані, введені користувачем,
+    /// перед їх передачею у прив'язану властивість.
+    /// </summary>
     public class AgeValidationRule : ValidationRule
     {
         public int MinAge { get; set; } = 16;

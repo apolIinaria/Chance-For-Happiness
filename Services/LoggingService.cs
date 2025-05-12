@@ -3,6 +3,10 @@ using System.IO;
 
 namespace ChanceForHappiness.Services
 {
+    /// <summary>
+    /// Сервіс для логування подій, попереджень та помилок додатку.
+    /// Записує повідомлення у щоденні лог-файли для відстеження роботи програми.
+    /// </summary>
     public class LoggingService
     {
         private readonly string _logFilePath;

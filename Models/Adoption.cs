@@ -3,6 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ChanceForHappiness.Models
 {
+    /// <summary>
+    /// Клас, що представляє заявку на усиновлення тварини.
+    /// Містить всю необхідну інформацію про потенційного усиновлювача
+    /// та деталі його житлової ситуації для оцінки можливості прихистку.
+    /// </summary>
     public class Adoption
     {
         public int Id { get; set; }

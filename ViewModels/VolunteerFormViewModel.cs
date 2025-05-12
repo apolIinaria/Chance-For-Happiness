@@ -6,6 +6,10 @@ using ChanceForHappiness.Services;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// ViewModel для форми подання заявки на волонтерство.
+    /// Надає функціональність для заповнення, валідації та відправлення форми.
+    /// </summary>
     public class VolunteerFormViewModel : ViewModelBase
     {
         private string _name;
@@ -132,6 +136,7 @@ namespace ChanceForHappiness.ViewModels
 
         public ICommand CancelCommand { get; }
 
+        /// Конструктор класу VolunteerFormViewModel.
         public VolunteerFormViewModel()
         {
             SubmitApplicationCommand = new RelayCommand(param => SubmitApplication(), CanSubmitApplication);
@@ -142,6 +147,7 @@ namespace ChanceForHappiness.ViewModels
             App.LoggingService.Log("VolunteerFormViewModel ініціалізовано");
         }
 
+        /// Перевіряє, чи можна подати заявку на волонтерство.
         private bool CanSubmitApplication(object param)
         {
             return !IsSubmitting &&
@@ -157,6 +163,7 @@ namespace ChanceForHappiness.ViewModels
                    AgreedToTerms;
         }
 
+        /// Виконує подачу заявки на волонтерство.
         private void SubmitApplication()
         {
             IsSubmitting = true;
@@ -207,6 +214,7 @@ namespace ChanceForHappiness.ViewModels
             }
         }
 
+        /// Очищає форму після успішної подачі заявки.
         private void ClearForm()
         {
             Name = string.Empty;

@@ -6,6 +6,10 @@ using ChanceForHappiness.Models.Enums;
 
 namespace ChanceForHappiness.Helpers
 {
+    /// <summary>
+    /// Конвертер для перетворення перерахування AnimalType у читабельні рядки та назад.
+    /// Використовується в UI для відображення типу тварини українською мовою.
+    /// </summary>
     public class AnimalTypeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -40,6 +44,10 @@ namespace ChanceForHappiness.Helpers
         }
     }
 
+    /// <summary>
+    /// Конвертер для перетворення перерахування AnimalStatus у локалізовані рядки та назад.
+    /// Використовується для відображення статусу тварин у інтерфейсі.
+    /// </summary>
     public class AnimalStatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -79,6 +87,9 @@ namespace ChanceForHappiness.Helpers
         }
     }
 
+    /// <summary>
+    /// Конвертер для перетворення логічних значень (true/false) у локалізовані рядки "Так"/"Ні".
+    /// </summary>
     public class BoolToYesNoConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -102,6 +113,10 @@ namespace ChanceForHappiness.Helpers
         }
     }
 
+    /// <summary>
+    /// Конвертер для перетворення логічних значень у значення видимості елементів WPF UI.
+    /// Використовується для динамічного показу/приховування елементів інтерфейсу.
+    /// </summary>
     public class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -125,6 +140,10 @@ namespace ChanceForHappiness.Helpers
         }
     }
 
+    /// <summary>
+    /// Конвертер для перетворення null-значень у значення видимості елементів UI.
+    /// Елемент буде видимим, якщо значення не null, і прихованим, якщо null.
+    /// </summary>
     public class NullToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -138,6 +157,10 @@ namespace ChanceForHappiness.Helpers
         }
     }
 
+    /// <summary>
+    /// Конвертер для перетворення рядкових значень у значення видимості елементів UI.
+    /// Елемент буде видимим, якщо рядок не порожній, і прихованим, якщо порожній або містить лише пробіли.
+    /// </summary>
     public class StringToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -152,6 +175,10 @@ namespace ChanceForHappiness.Helpers
         }
     }
 
+    /// <summary>
+    /// Конвертер для перетворення числового значення (лічильника) у значення видимості.
+    /// Часто використовується для показу альтернативного вмісту, коли колекція порожня.
+    /// </summary>
     public class CountToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

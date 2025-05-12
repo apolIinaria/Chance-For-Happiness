@@ -11,6 +11,11 @@ using Microsoft.Extensions.Configuration.Json;
 
 namespace ChanceForHappiness.Data
 {
+    /// <summary>
+    /// Основний клас контексту бази даних для застосунку,
+    /// який наслідується від DbContext із Entity Framework Core.
+    /// Надає доступ до таблиць та визначає їх структуру.
+    /// </summary>
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Animal> Animals { get; set; }
@@ -31,6 +36,10 @@ namespace ChanceForHappiness.Data
             }
         }
 
+        /// <summary>
+        /// Метод налаштування моделі даних - визначає структуру таблиць,
+        /// зв'язки між ними та обмеження на поля
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

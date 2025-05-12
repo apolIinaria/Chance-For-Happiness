@@ -5,6 +5,11 @@ using System.Runtime.CompilerServices;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// Базовий клас для всіх ViewModel у додатку.
+    /// Реалізує інтерфейс INotifyPropertyChanged для підтримки двосторонньої прив'язки даних
+    /// та надає загальні методи для роботи з властивостями.
+    /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
@@ -24,12 +29,6 @@ namespace ChanceForHappiness.ViewModels
             storage = value;
             OnPropertyChanged(propertyName);
             return true;
-        }
-
-        protected void LogPropertyChange(string propertyName, object oldValue, object newValue)
-        {
-            App.LoggingService.Log($"Власність змінено: {GetType().Name}.{propertyName} " +
-                                   $"З '{oldValue ?? "null"}' на '{newValue ?? "null"}'");
         }
 
         public virtual void Load() { }

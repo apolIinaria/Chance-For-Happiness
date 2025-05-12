@@ -10,7 +10,7 @@
         Title="Шанс на щастя - притулок для тварин" 
         Height="650" Width="1000"
         MinHeight="550" MinWidth="800"
-        Icon="C:\Users\User\Documents\Uni\OOP\Sem_2\ChanceForHappiness\Resources\icon CfH.ico">
+        Icon="pack://application:,,,/Resources/iconCfH.ico">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type viewmodels:HomeViewModel}">

@@ -6,6 +6,7 @@ namespace ChanceForHappiness
 {
     public partial class App : Application
     {
+        // Статичні сервіси для доступу з усіх частин програми
         public static NavigationService? NavigationService { get; private set; }
         public static DataService? DataService { get; private set; }
         public static LoggingService? LoggingService { get; private set; }

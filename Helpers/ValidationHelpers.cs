@@ -4,6 +4,10 @@ using System.Windows.Controls;
 
 namespace ChanceForHappiness.Helpers
 {
+    /// <summary>
+    /// Статичний клас, що містить допоміжні методи для валідації різних типів даних.
+    /// Використовується різними валідаторами в додатку для перевірки введених користувачем даних.
+    /// </summary>
     public static class ValidationHelpers
     {
         public static bool IsValidEmail(string email)

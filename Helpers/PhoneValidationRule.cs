@@ -3,6 +3,11 @@ using System.Windows.Controls;
 
 namespace ChanceForHappiness.Helpers
 {
+    /// <summary>
+    /// Клас для валідації номерів телефону у застосунку.
+    /// Перевіряє, чи номер телефону є коректним українським номером.
+    /// Наслідується від ValidationRule для інтеграції з системою валідації WPF.
+    /// </summary>
     public class PhoneValidationRule : ValidationRule
     {
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)

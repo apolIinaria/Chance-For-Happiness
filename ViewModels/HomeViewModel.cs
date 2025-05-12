@@ -5,6 +5,10 @@ using ChanceForHappiness.Services;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// ViewModel для головного екрану додатку.
+    /// Надає інформацію про притулок та основні команди для навігації.
+    /// </summary>
     public class HomeViewModel : ViewModelBase
     {
         private string _shelterName;
@@ -59,6 +63,8 @@ namespace ChanceForHappiness.ViewModels
         public ICommand ViewAnimalsCommand { get; }
         public ICommand BecomeVolunteerCommand { get; }
 
+        /// Конструктор ViewModel головного екрану.
+        /// Ініціалізує дані притулку та команди.
         public HomeViewModel()
         {
             ViewAnimalsCommand = new RelayCommand(param => App.NavigationService.NavigateTo(ViewType.AnimalList));

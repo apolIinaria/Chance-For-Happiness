@@ -4,6 +4,10 @@ using ChanceForHappiness.Services;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// Головна ViewModel додатку, яка керує відображенням поточного контенту
+    /// та забезпечує навігацію між різними розділами додатку.
+    /// </summary>
     public class MainViewModel : ViewModelBase
     {
         private ViewModelBase _currentView;
@@ -32,6 +36,12 @@ namespace ChanceForHappiness.ViewModels
             NavigateToAdoptionFormCommand = new RelayCommand(param => Navigate(ViewType.AdoptionForm));
             NavigateToVolunteerFormCommand = new RelayCommand(param => Navigate(ViewType.VolunteerForm));
         }
+
+        /// <summary>
+        /// Виконує навігацію до вказаного типу представлення.
+        /// Спочатку намагається використати NavigationService, а якщо він недоступний,
+        /// створює відповідну ViewModel напряму.
+        /// </summary>
         private void Navigate(ViewType viewType)
         {
             try

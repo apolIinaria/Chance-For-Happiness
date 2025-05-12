@@ -5,6 +5,10 @@ using ChanceForHappiness.Models.Enums;
 
 namespace ChanceForHappiness.Models
 {
+    /// <summary>
+    /// Клас, що представляє тварину в притулку.
+    /// Містить повну інформацію про тварину, її характеристики, медичний та поведінковий статус.
+    /// </summary>
     public class Animal
     {
         [Key]
@@ -75,7 +79,5 @@ namespace ChanceForHappiness.Models
         public bool IsHouseTrained { get; set; }
 
         public bool IsVaccinated { get; set; }
-
-        public string Slug => $"{Id}-{Name.ToLower().Replace(" ", "-")}";
     }
 }

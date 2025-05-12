@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace ChanceForHappiness.Models.Enums
 {
+    /// <summary>
+    /// Перерахування, що визначає можливі статуси тварини в притулку.
+    /// Використовується для відстеження стану тварин та керування процесом їх прихистку.
+    /// </summary>
     public enum AnimalStatus
     {
         Available,

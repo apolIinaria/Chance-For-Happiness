@@ -7,6 +7,10 @@ using ChanceForHappiness.Models.Enums;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// ViewModel для відображення та фільтрації списку тварин.
+    /// Забезпечує функціональність пошуку, фільтрації та навігації до деталей тварин.
+    /// </summary>
     public class AnimalListViewModel : ViewModelBase
     {
         private ObservableCollection<Animal> _animals;
@@ -15,6 +19,7 @@ namespace ChanceForHappiness.ViewModels
         private AnimalStatus? _selectedStatus;
         private bool _isLoading;
 
+        /// Колекція тварин, що відображається в інтерфейсі.
         public ObservableCollection<Animal> Animals
         {
             get => _animals;
@@ -66,6 +71,8 @@ namespace ChanceForHappiness.ViewModels
 
         public ICommand ClearFiltersCommand { get; }
 
+        /// Конструктор ViewModel списку тварин.
+        /// Ініціалізує команди та завантажує дані.
         public AnimalListViewModel()
         {
             ViewAnimalDetailsCommand = new RelayCommand(param =>
@@ -88,6 +95,8 @@ namespace ChanceForHappiness.ViewModels
 
             App.LoggingService.Log("AnimalListViewModel ініціалізовано");
         }
+
+        /// Завантажує всі дані про тварин із сервісу даних.
         public override void Load()
         {
             IsLoading = true;
@@ -108,6 +117,7 @@ namespace ChanceForHappiness.ViewModels
             }
         }
 
+        /// Фільтрує список тварин відповідно до вибраних фільтрів.
         private void FilterAnimals()
         {
             IsLoading = true;

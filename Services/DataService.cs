@@ -10,9 +10,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChanceForHappiness.Services
 {
+    /// <summary>
+    /// Сервіс для роботи з даними додатку.
+    /// Забезпечує операції створення, читання, оновлення та видалення (CRUD)
+    /// для основних сутностей додатку: тварин, заявок на прихисток та волонтерів.
+    /// </summary>
     public class DataService
     {
         private readonly ApplicationDbContext _context;
+
+        /// Конструктор сервісу даних.
+        /// Ініціалізує базу даних і створює початкові дані, якщо вони відсутні.
         public DataService()
         {
             _context = new ApplicationDbContext();
@@ -27,21 +35,19 @@ namespace ChanceForHappiness.Services
 
         #region Animal Methods
 
+        /// Отримує список усіх тварин з бази даних.
         public List<Animal> GetAllAnimals()
         {
             return _context.Animals.ToList();
         }
 
-        public List<Animal> GetAnimalsByType(AnimalType type)
-        {
-            return _context.Animals.Where(a => a.Type == type).ToList();
-        }
-
+        /// Отримує список тварин за їхнім статусом.
         public List<Animal> GetAnimalsByStatus(AnimalStatus status)
         {
             return _context.Animals.Where(a => a.Status == status).ToList();
         }
 
+        /// Отримує тварину за її унікальним ідентифікатором.
         public Animal GetAnimalById(int id)
         {
             var animal = _context.Animals.FirstOrDefault(a => a.Id == id);
@@ -58,69 +64,12 @@ namespace ChanceForHappiness.Services
             return animal;
         }
 
-        public void AddAnimal(Animal animal)
-        {
-            _context.Animals.Add(animal);
-            _context.SaveChanges();
-            App.LoggingService.Log($"Додано нову тварини: {animal.Name} (ID: {animal.Id})");
-        }
-
-        public bool UpdateAnimal(Animal animal)
-        {
-            try
-            {
-                _context.Animals.Update(animal);
-                _context.SaveChanges();
-                App.LoggingService.Log($"Оновлено тварину: {animal.Name} (ID: {animal.Id})");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                App.LoggingService.LogWarning($"Не вдалося оновити тварину {animal.Id} - не знайдено. Помилка: {ex.Message}");
-                return false;
-            }
-        }
-
-        public bool UpdateAnimalStatus(int animalId, AnimalStatus newStatus)
-        {
-            var animal = _context.Animals.Find(animalId);
-
-            if (animal != null)
-            {
-                animal.Status = newStatus;
-                _context.Animals.Update(animal);
-                _context.SaveChanges();
-                App.LoggingService.Log($"Оновлено статус тварини: {animal.Name} (ID: {animal.Id}) на {newStatus}");
-                return true;
-            }
-
-            App.LoggingService.LogWarning($"Не вдалося оновити статус тварини {animalId} - не знайдено");
-            return false;
-        }
-
         #endregion
 
         #region Adoption Methods
 
-        public List<Adoption> GetAllAdoptions()
-        {
-            return _context.Adoptions.ToList();
-        }
-
-        public List<Adoption> GetAdoptionsByAnimal(int animalId)
-        {
-            return _context.Adoptions
-                .Include(a => a.Animal)
-                .Where(a => a.AnimalId == animalId)
-                .ToList();
-        }
-        public Adoption GetAdoptionById(int id)
-        {
-            return _context.Adoptions
-                .Include(a => a.Animal)
-                .FirstOrDefault(a => a.Id == id);
-        }
-
+        /// Подає нову заявку на прихисток тварини.
+        /// Автоматично оновлює статус тварини на "Зарезервована".
         public void SubmitAdoption(Adoption adoption)
         {
             adoption.SubmissionDate = DateTime.Now;
@@ -142,58 +91,12 @@ namespace ChanceForHappiness.Services
                 throw new ArgumentException($"Тварини {adoption.AnimalId} не знайдено");
             }
         }
-        public bool UpdateAdoptionStatus(int adoptionId, string newStatus)
-        {
-            var adoption = _context.Adoptions.Find(adoptionId);
-
-            if (adoption != null)
-            {
-                adoption.Status = newStatus;
-
-                if (newStatus.Equals("Схвалено", StringComparison.OrdinalIgnoreCase))
-                {
-                    var animal = _context.Animals.Find(adoption.AnimalId);
-                    if (animal != null)
-                    {
-                        animal.Status = AnimalStatus.Adopted;
-                        _context.Animals.Update(animal);
-                    }
-                }
-
-                else if (newStatus.Equals("Відхилено", StringComparison.OrdinalIgnoreCase))
-                {
-                    var animal = _context.Animals.Find(adoption.AnimalId);
-                    if (animal != null)
-                    {
-                        animal.Status = AnimalStatus.Available;
-                        _context.Animals.Update(animal);
-                    }
-                }
-
-                _context.Adoptions.Update(adoption);
-                _context.SaveChanges();
-                App.LoggingService.Log($"Оновлений статус заяви на прихист {adoptionId} на {newStatus}");
-                return true;
-            }
-
-            App.LoggingService.LogWarning($"Не вдалося оновити статус заяви на прихист {adoptionId} - не знайдено");
-            return false;
-        }
 
         #endregion
 
         #region Volunteer Methods
 
-        public List<Volunteer> GetAllVolunteers()
-        {
-            return _context.Volunteers.ToList();
-        }
-
-        public Volunteer GetVolunteerById(int id)
-        {
-            return _context.Volunteers.Find(id);
-        }
-
+        /// Отримує список усіх волонтерів з бази даних.
         public void SubmitVolunteer(Volunteer volunteer)
         {
             volunteer.SubmissionDate = DateTime.Now;
@@ -204,28 +107,11 @@ namespace ChanceForHappiness.Services
             App.LoggingService.Log($"Нова волонтерська заявка подана від {volunteer.Name}");
         }
 
-        public bool UpdateVolunteerStatus(int volunteerId, string newStatus)
-        {
-            var volunteer = _context.Volunteers.Find(volunteerId);
-
-            if (volunteer != null)
-            {
-                volunteer.Status = newStatus;
-                _context.Volunteers.Update(volunteer);
-                _context.SaveChanges();
-
-                App.LoggingService.Log($"Оновлений статус заявки волонтера {volunteerId} на {newStatus}");
-                return true;
-            }
-
-            App.LoggingService.LogWarning($"Не вдалося оновити статус волонтера для {volunteerId} - не знайдено");
-            return false;
-        }
-
         #endregion
 
         #region Private Methods
 
+        /// Метод для заповнення початкових даних у базі даних.
         private void SeedInitialData()
         {
             string baseImagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "Images", "");

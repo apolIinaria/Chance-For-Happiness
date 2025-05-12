@@ -7,6 +7,11 @@ using Microsoft.IdentityModel.Logging;
 
 namespace ChanceForHappiness.ViewModels
 {
+    /// <summary>
+    /// ViewModel для відображення детальної інформації про тварину.
+    /// Надає доступ до всіх даних про конкретну тварину та дозволяє
+    /// виконувати дії, такі як подача заявки на прихисток.
+    /// </summary>
     public class AnimalDetailViewModel : ViewModelBase
     {
         private readonly int _animalId;
@@ -71,6 +76,7 @@ namespace ChanceForHappiness.ViewModels
             App.LoggingService.Log($"AnimalDetailViewModel ініціалізовано для: {animalId}");
         }
 
+        /// Завантажує дані про тварину з сервісу даних
         public override void Load()
         {
             IsLoading = true;

@@ -3,6 +3,11 @@ using System.Windows.Controls;
 
 namespace ChanceForHappiness.Helpers
 {
+    /// <summary>
+    /// Клас для валідації обов'язкових текстових полів у WPF застосунку.
+    /// Перевіряє наявність тексту та обмежує його максимальну довжину.
+    /// Наслідується від ValidationRule для інтеграції з системою валідації WPF.
+    /// </summary>
     public class RequiredTextValidationRule : ValidationRule
     {
         public int MaxLength { get; set; } = 1000;
